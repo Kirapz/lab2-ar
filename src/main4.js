@@ -84,7 +84,7 @@ function onSelect() {
                 model.position.setFromMatrixPosition(reticle.matrix);
                 
                 // МАСШТАБ: вам може знадобитися змінити ці цифри залежно від розміру вашої моделі будівлі
-                model.scale.set(0.05, 0.05, 0.05); 
+                model.scale.set(0.001, 0.001, 0.001); 
                 
                 // Додаємо модель на сцену ЗБЕРІГАЮЧИ оригінальні текстури будівлі
                 scene.add(model);
