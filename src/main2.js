@@ -35,8 +35,7 @@ function init() {
     scene.add(ambientLight);
     
     // Твоє посилання на завантажену модель
-    const modelUrl = 'https://lab2-ar.vercel.app/models/model.glb';
-
+     const modelUrl = '/models/model.glb';
     // Створюємо завантажувач та додаємо GLTF/GLB модель на сцену
     loader = new GLTFLoader();
     loader.load(
