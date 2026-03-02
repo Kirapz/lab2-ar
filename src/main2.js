@@ -27,7 +27,7 @@ function init() {
     renderer.xr.enabled = true; 
     container.appendChild(renderer.domElement);
 
-    // --- ОСВІТЛЕННЯ (робимо яскравіше) ---
+    // освітлення
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
     scene.add(ambientLight);
 
@@ -35,7 +35,7 @@ function init() {
     directionalLight.position.set(5, 10, 5); // Підняли світло вище
     scene.add(directionalLight);
 
-    // Додаємо напівсферичне світло, щоб модель гарно виглядала з усіх боків
+    // Додаємо напівсферичне світло
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
     hemiLight.position.set(0, 20, 0);
     scene.add(hemiLight);
@@ -49,14 +49,13 @@ function init() {
         function (gltf) {
             model = gltf.scene;
 
-            // 1. Зменшуємо модель рівно у 2 рази (було 1, 1, 1)
+            // зменшити модель
             model.scale.set(0.5, 0.5, 0.5); 
 
-            // 2. Опускаємо нижче. Y відповідає за висоту. 
-            // Якщо раніше було -0.5, давай зробимо -1.2 (це опустить її ще на 70 сантиметрів вниз)
+            // опустити нижче
             model.position.set(0, -1.2, -2); 
 
-            // Залишаємо виправлення для матеріалів на всяк випадок (зайвим не буде для будь-якої моделі)
+            //  виправлення для матеріалів з прозорістю
             model.traverse((child) => {
                 if (child.isMesh && child.material) {
                     child.material.side = THREE.DoubleSide;
