@@ -49,28 +49,26 @@ function init() {
         function (gltf) {
             model = gltf.scene;
 
-            // 1. Ручне масштабування (якщо вона буде замала, зміни на 2, 3 або 5)
-            model.scale.set(1.5, 1.5, 1.5); 
+            // 1. Зменшуємо модель рівно у 2 рази (було 1, 1, 1)
+            model.scale.set(0.5, 0.5, 0.5); 
 
-            // 2. Ставимо прямо перед тобою: по центру (0), на рівні грудей (1.2) і трохи ближче (-1.5)
-            model.position.set(0, 1.2, -1.5); 
+            // 2. Опускаємо нижче. Y відповідає за висоту. 
+            // Якщо раніше було -0.5, давай зробимо -1.2 (це опустить її ще на 70 сантиметрів вниз)
+            model.position.set(0, -1.2, -2); 
 
-            // 3. РЯТУЄМО ВОЛОССЯ ТА ОЧІ
+            // Залишаємо виправлення для матеріалів на всяк випадок (зайвим не буде для будь-якої моделі)
             model.traverse((child) => {
-                if (child.isMesh) {
-                    // Змушуємо Three.js малювати текстури з обох боків (повертає волосся)
+                if (child.isMesh && child.material) {
                     child.material.side = THREE.DoubleSide;
-                    
-                    // Виправляємо проблеми з прозорістю (повертає очі та вії)
                     if (child.material.transparent || child.material.map) {
-                        child.material.alphaTest = 0.5; // Відкидає баги з прозорим фоном
+                        child.material.alphaTest = 0.5;
                         child.material.depthWrite = true; 
                     }
                 }
             });
 
             scene.add(model);
-            console.log("Модель успішно завантажена з виправленими матеріалами!");
+            console.log("Модель успішно завантажена, зменшена та опущена!");
         },
         function (xhr) {
             console.log((xhr.loaded / xhr.total * 100) + '% loaded');
