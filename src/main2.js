@@ -40,35 +40,35 @@ function init() {
     // Створюємо завантажувач та додаємо GLTF/GLB модель на сцену
     loader = new GLTFLoader();
     loader.load(
-        modelUrl,
+        'https://lab2-ar.vercel.app/models/model.glb',
         function (gltf) {
             model = gltf.scene;
-
-            // 1. Створюємо "коробку" навколо моделі, щоб виміряти її реальні габарити
-            const box = new THREE.Box3().setFromObject(model);
-            const size = box.getSize(new THREE.Vector3()).length();
-            const center = box.getCenter(new THREE.Vector3());
-
-            // 2. Центруємо модель (виправляємо помилки дизайнерів, якщо об'єкт зміщений)
-            model.position.x += (model.position.x - center.x);
-            model.position.y += (model.position.y - center.y);
-            model.position.z += (model.position.z - center.z);
-
-            // 3. Автоматично масштабуємо модель, щоб вона була розміром приблизно 1 метр
-            const scale = 1 / size;
-            model.scale.set(scale, scale, scale);
-
-            // 4. Ставимо модель рівно по центру (0), трохи нижче рівня очей (-0.5) і на 2 метри вперед (-2)
-            model.position.set(0, -0.5, -2);
-
+            
+            // Ставимо модель на 3 метри перед тобою
+            model.position.z = -3;
             scene.add(model);
-            console.log("Модель успішно відцентрована, відмасштабована та додана на сцену!");
+
+            // Використовуємо матеріал викладача, щоб виключити помилки з текстурами
+            const goldMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffd700, 
+                metalness: 1,
+                roughness: 0.1,
+            });
+            
+            model.traverse((child) => {
+                if (child.isMesh) {
+                    child.material = goldMaterial;
+                    child.material.needsUpdate = true;
+                }
+            });
+
+            console.log("Model added to scene");
         },
         function (xhr) {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded' );
         },
         function (error) {
-            console.error('Помилка завантаження моделі:', error);
+            console.error('Помилка:', error);
         }
     );
 
