@@ -7,7 +7,7 @@ let container;
 let camera, scene, renderer;
 let reticle;
 let controller;
-let model = null; // Змінна для нашої будівлі
+let model = null; 
 
 let hitTestSource = null;
 let hitTestSourceInitialized = false;
@@ -32,7 +32,7 @@ function init() {
     renderer.xr.enabled = true;
     container.appendChild(renderer.domElement);
 
-    // --- ОСВІТЛЕННЯ (М'яке для архітектури) ---
+    // освітлення
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
     scene.add(ambientLight);
 
@@ -66,11 +66,9 @@ function addReticleToScene() {
 
 function onSelect() {
     if (reticle.visible) {
-        // Шлях до вашої моделі (має лежати в папці public/models/model2.glb)
         const modelUrl = './models/model2.glb';
         const loader = new GLTFLoader();
 
-        // Якщо модель вже існує, видаляємо її перед встановленням нової
         if (model) {
             scene.remove(model);
         }
@@ -79,14 +77,8 @@ function onSelect() {
             modelUrl,
             function (gltf) {
                 model = gltf.scene;
-                
-                // Правильне позиціонування з ретікла
                 model.position.setFromMatrixPosition(reticle.matrix);
-                
-                // МАСШТАБ: вам може знадобитися змінити ці цифри залежно від розміру вашої моделі будівлі
                 model.scale.set(0.005, 0.005, 0.005); 
-                
-                // Додаємо модель на сцену ЗБЕРІГАЮЧИ оригінальні текстури будівлі
                 scene.add(model);
             },
             function (xhr) {
@@ -141,7 +133,6 @@ function render(timestamp, frame) {
             }
         }
         
-        // Повільне обертання будівлі навколо своєї осі, щоб можна було її роздивитися
         if (model) {
             model.rotation.y -= 0.005;
         }
